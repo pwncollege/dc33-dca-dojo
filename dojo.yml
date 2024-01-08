@@ -1,5 +1,6 @@
 id: example
 name: Example Dojo
+icon: blue.svg
 type: example
 award:
   emoji: 😀
