@@ -3,7 +3,7 @@ name: Example Dojo
 type: example
 award:
   emoji: 😀
-  icon: blue
+  belt: blue
 modules:
   - id: hello
   - id: world
