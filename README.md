@@ -28,7 +28,7 @@ The top-level object is the `Dojo`. It consists of six properties:
 - `id`: **Required**. A unique identifier for the Dojo.
 - `name`: **Required**. The display name of the Dojo.
 - `description`: **Optional**. Additional details about the Dojo. This can include formatted markdown text.
-- `type`: **Optional**. This field can take the values `course`, `topic`, or `hidden`. `course` places it in the "Courses" section. `topic` places the Dojo in the "Topics" section. `hidden` means the Dojo won't be listed (but is still accessible). If the type field is omitted or contains a value other than these three, the Dojo will appear in the "More" section.
+- `type`: **Optional**. This field can take the values `course`, `topic`, `private`, or `hidden`. `course` places it in the "Courses" section. `topic` places the Dojo in the "Topics" section. `hidden` means the Dojo won't be listed (but is still accessible). If the type field is omitted or contains a value other than these three, the Dojo will appear in the "More" section.
 - `password`: **Optional**. A password that users need to join the Dojo. If omitted, the Dojo is open for anyone to join.
 - `modules`: **Required**. An array of `Module` objects.
 
