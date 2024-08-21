@@ -1,4 +1,6 @@
 name: Hello
+visibility:
+  start: "2024-08-20T18:00:00-7:00"
 challenges:
   - id: apple
     name: Apple
