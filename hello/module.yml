@@ -3,7 +3,7 @@ visibility:
   start: "2024-08-27T18:00:00-07:00"
 
 challenges:
-  - id: apple
-    name: Apple
   - id: banana
     name: Banana
+  - id: apple
+    name: Apple
