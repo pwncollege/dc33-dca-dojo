@@ -5,5 +5,5 @@ award:
   emoji: 😀
   belt: blue
 modules:
-  - id: world
   - id: hello
+  - id: world
