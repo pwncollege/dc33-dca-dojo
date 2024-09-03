@@ -9,6 +9,6 @@ modules:
   - id: world
   - import:
       dojo: software-exploitation
-      module: speculative-execution
+      module: kernel-exploitation
     visibility:
       start: "2024-11-15T18:00:00-07:00"
