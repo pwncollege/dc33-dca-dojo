@@ -10,5 +10,5 @@ modules:
   - import:
       dojo: software-exploitation
       module: kernel-exploitation
-      visibility:
-        start: "2024-11-15T18:00:00-07:00"
+    visibility:
+      start: "2024-11-15T18:00:00-07:00"
