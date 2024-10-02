@@ -1,0 +1,26 @@
+letter_grades:
+  "A+": 1.00
+  "A": 0.93
+  "A-": 0.90
+  "B+": 0.88
+  "B": 0.83
+  "B-": 0.80
+  "C+": 0.78
+  "C": 0.70
+  "E": 0.00
+
+assessments:
+- type: checkpoint
+  id: robexample
+  date: "2024-09-02T23:59:59-07:00"
+  percent_required: 0.5
+  weight: 2
+
+- type: due
+  id: robexample
+  date: "2024-09-02T23:59:59-07:00"
+  percent_required: 1.0
+  weight: 8
+  late_penalty: 0.5
+
+- type: helpfulness
