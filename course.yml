@@ -11,14 +11,16 @@ letter_grades:
 
 assessments:
 - type: checkpoint
-  id: robexample
+  id: hello
   date: "2024-09-02T23:59:59-07:00"
   percent_required: 0.5
   weight: 2
 
 - type: due
-  id: robexample
+  id: hello
   date: "2024-09-02T23:59:59-07:00"
   percent_required: 1.0
   weight: 8
   late_penalty: 0.5
+
+- type: helpfulness
