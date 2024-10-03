@@ -24,3 +24,4 @@ assessments:
   late_penalty: 0.5
 
 - type: helpfulness
+- type: memes
