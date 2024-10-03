@@ -9,7 +9,6 @@ letter_grades:
   "C": 0.70
   "E": 0.00
 
-ec_limit: 0.001
 
 assessments:
 - type: checkpoint
