@@ -9,6 +9,8 @@ letter_grades:
   "C": 0.70
   "E": 0.00
 
+ec_limit: 0.001
+
 assessments:
 - type: checkpoint
   id: hello
@@ -24,4 +26,15 @@ assessments:
   late_penalty: 0.5
 
 - type: helpfulness
+  method: log50
+  max_credit: 0.05
+  
 - type: memes
+
+- type: memes
+  name: cse598
+  max_credit: 0.03
+
+- type: helpfulness
+  name: cse365
+  method: 1337log2
