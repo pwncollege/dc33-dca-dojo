@@ -9,8 +9,6 @@ letter_grades:
   "C": 0.70
   "E": 0.00
 
-ec_limit: 0.01
-
 assessments:
 - type: checkpoint
   id: hello
@@ -28,6 +26,12 @@ assessments:
 - type: helpfulness
   method: log50
   max_credit: 0.05
+
+- type: helpfulness
+  name: unique help
+  method: log50
+  max_credit: 0.05
+  unique_message: True
   
 - type: memes
 
