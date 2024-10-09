@@ -31,7 +31,7 @@ assessments:
   name: unique help
   method: log50
   max_credit: 0.05
-  unique_message: True
+  unique: True
   
 - type: memes
 
