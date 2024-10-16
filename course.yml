@@ -9,6 +9,8 @@ letter_grades:
   "C": 0.70
   "E": 0.00
 
+start_date: "2024-08-27T18:00:00-07:00"
+
 assessments:
 - type: checkpoint
   id: hello
