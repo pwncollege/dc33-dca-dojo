@@ -5,5 +5,5 @@ description: |
   You don’t need permission to become a hacker, just a place to start. These challenges were built to teach, push, and inspire. Whether you’re cracking your first binary or solving your tenth pwnable, Defcon Academy has your back. Step up, dig in, and learn the skills that power the cybesecurity field.
 
 modules:
-  - id: dc33-dca-race-against-the-machine
-  - id: dc33-dca-deceit-by-design
+  - id: dc33-race-against-the-machine
+  - id: dc33-deceit-by-design
