@@ -1,9 +1,0 @@
-name: Hello and hidden
-visibility:
-  start: "2024-08-27T18:00:00-07:00"
-
-challenges:
-  - id: banana
-    name: Banana
-  - id: apple
-    name: Apple
