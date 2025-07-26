@@ -1,0 +1,24 @@
+#!/bin/sh
+mkdir /challenge/.secret
+mv /flag /challenge/.secret
+rm /challenge/Dockerfile
+rm /challenge/requirements.txt
+rm /challenge/.secret/flag.txt
+rm /challenge/entrypoint.sh
+chown hacker:hacker /challenge/.secret/flag
+
+######################
+# Making start work
+######################
+mkdir -p /challenge/bin
+cat > /challenge/bin/start << 'EOF'
+#!/usr/bin/exec-suid -- /bin/bash
+# Replace this shell with your CTF app
+/challenge/app.py
+EOF
+chmod +x /challenge/bin/start
+chown -R root:root /challenge/bin
+RC=/challenge/.bashrc
+LINE='export PATH="$HOME/bin:$PATH"'
+grep -qxF "$LINE" "$RC" || echo "$LINE" >> "$RC"
+chown root:root "$RC"

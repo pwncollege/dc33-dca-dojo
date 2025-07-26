@@ -1,0 +1,8 @@
+id: linux-legion 
+name: Linux Legion
+
+challenges:
+  - id: first
+    name: Terminal Basics
+    image: prathamgupta36/dca-basic-challenge
+    description: type `start` and press enter
