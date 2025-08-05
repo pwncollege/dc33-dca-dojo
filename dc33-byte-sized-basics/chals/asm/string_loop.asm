@@ -9,13 +9,19 @@ section .data
 section .text
 main:
 
-<YOUR CODE GOES HERE>
+;<YOUR CODE GOES HERE>
 
 
+;<YOUR CODE STOPS HERE>
 
+.print:
+    lea rdi, [rel fmt]
+    movzx rsi, al
+    xor eax, eax
+    call printf
 
-<YOUR CODE STOPS HERE>   
-          
+    inc rbx
+    jmp .loop
 
 .done:
     mov   eax, 0             

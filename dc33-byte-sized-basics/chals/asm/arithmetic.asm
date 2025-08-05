@@ -20,12 +20,13 @@ print_rax:
 
 
 main:
-<YOUR CODE GOES HERE>
+
+;<YOUR CODE GOES HERE>
 
 
 
 
-<YOUR CODE STOPS HERE>
+;<YOUR CODE STOPS HERE>
 
 call print_rax
 

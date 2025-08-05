@@ -11,5 +11,5 @@ int main() {
   int rsi = 2;
 
   unsigned int x = (rax + rcx) * (rdx - rdi) / rsi;
-  printf("%u\n", x);
+  printf("%d\n", x);
 }
