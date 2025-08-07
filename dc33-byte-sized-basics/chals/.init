@@ -1,2 +1,23 @@
-#!/bin/sh
-chmod -R 777 /challenge/
+#!/usr/bin/env bash
+set -euo pipefail
+
+USER_NAME="hacker"
+USER_UID="$(id -u "$USER_NAME")"
+USER_GID="$(id -g "$USER_NAME")"
+
+TMPDIR="$(mktemp -d)"
+install -d -m 700 "$TMPDIR"
+
+cp -a /challenge/asm   "$TMPDIR"/
+cp -a /challenge/c     "$TMPDIR"/
+cp -a /challenge/tools "$TMPDIR"/
+chown -R "$USER_UID:$USER_GID" "$TMPDIR"
+
+chown root:root /challenge/auto_gdb
+chmod 4755 /challenge/auto_gdb
+
+chown "$USER_UID:$USER_GID" /challenge/challenge
+chmod 0755 /challenge/challenge
+
+printf "%s\n" "$TMPDIR"
+
