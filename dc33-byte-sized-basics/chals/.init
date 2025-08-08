@@ -5,7 +5,7 @@ USER_NAME="hacker"
 USER_UID="$(id -u "$USER_NAME")"
 USER_GID="$(id -g "$USER_NAME")"
 
-TMPDIR="$(mktemp -d)"
+TMPDIR="/tmp/challenge"
 install -d -m 700 "$TMPDIR"
 
 cp -a /challenge/asm   "$TMPDIR"/
@@ -19,5 +19,5 @@ chmod 4755 /challenge/auto_gdb
 chown "$USER_UID:$USER_GID" /challenge/challenge
 chmod 0755 /challenge/challenge
 
-printf "%s\n" "$TMPDIR"
+
 
