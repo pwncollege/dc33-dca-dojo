@@ -1,0 +1,171 @@
+#!/usr/bin/exec-suid -- /usr/local/bin/python
+
+import os
+import time
+from termcolor import colored
+import pyfiglet
+
+# --- Challenge State ---
+process_is_running = True
+suspicious_process = {
+    "PID": "42781",
+    "USER": "root",
+    "PR": "20",
+    "NI": "0",
+    "VIRT": "18344",
+    "RES": "6440",
+    "SHR": "3324",
+    "S": "S",
+    "%CPU": "0.0",
+    "%MEM": "0.1",
+    "TIME+": "0:00.03",
+    "COMMAND": "suspicious_server"
+}
+listening_port = "45678"
+flag = open("/flag","r").read().split()
+
+def display_art(text, font='block'):
+    raw = pyfiglet.figlet_format(text, font=font)
+    solid = "".join("█" if c not in (" ", "\n") else c for c in raw)
+    return colored(solid, 'yellow')
+
+def explain_ping(args):
+    print(display_art('ping'))
+    print(colored("The 'ping' command checks network connectivity to a host.", 'green'))
+
+    if not args:
+        print(colored("Usage: ping <host>", 'red'))
+        return
+
+    host = args[0]
+    if host in ['localhost', '127.0.0.1']:
+        print(colored(f"\n---[ Pinging {host} ]---", "cyan"))
+        print(f"PING {host} (127.0.0.1) 56(84) bytes of data.")
+        print(f"64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.05 ms")
+        print(f"64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.06 ms")
+        print(colored("\n---[ Hint ]---", "cyan"))
+        print(colored("Connectivity to localhost is working. This means the server's own network service is up.", "magenta"))
+        print(colored("The problem must be a specific process running locally. Use 'ps' to investigate.", "magenta"))
+    else:
+        print(colored(f"\n---[ Pinging {host} ]---", "cyan"))
+        print(f"ping: connect: Network is unreachable")
+        print(colored("\n---[ Hint ]---", "cyan"))
+        print(colored("This server is not connected to the internet. Try checking the local network stack with 'ping localhost'.", "magenta"))
+
+
+def explain_ps(args):
+    print(display_art('ps'))
+    print(colored("The 'ps' command shows running processes.", 'green'))
+    
+    print(colored("\n---[ Your Processes ]---", "cyan"))
+    print("    PID TTY          TIME CMD")
+    print("  23131 pts/0    00:00:00 bash")
+    print("  23221 pts/0    00:00:00 python")
+    
+    if process_is_running:
+        p = suspicious_process
+        print(colored(f"  {p['PID']} pts/0    {p['TIME+']} {p['COMMAND']}", 'red'))
+
+    print(colored("\n---[ Hint ]---", "cyan"))
+    print(colored("This shows the processes for your current shell. To see everything running on the system (including processes run by other users), you need to use the 'aux' flags, like 'ps aux'.", "magenta"))
+
+def explain_ps_aux(args):
+    print(display_art('ps aux'))
+    print(colored("The 'ps aux' command shows ALL running processes on the system.", 'green'))
+
+    print(colored("\n---[ System Processes ]---", "cyan"))
+    print("USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND")
+    print("root           1  0.0  0.1  12345  6789 ?        Ss   08:00   0:01 /sbin/init")
+    print("root           2  0.0  0.0      0     0 ?        S    08:00   0:00 [kthreadd]")
+    
+    if process_is_running:
+        p = suspicious_process
+        print(colored(f"{p['USER']:<10} {p['PID']}  {p['%CPU']}  {p['%MEM']} {p['VIRT']:>6}  {p['RES']:>5} ?        S    08:01   {p['TIME+']} {p['COMMAND']}", 'red'))
+
+    print(colored("\n---[ Hint ]---", "cyan"))
+    print(colored("You've found it! The 'suspicious_server' process looks out of place. Now, let's see if it's making any network connections. Use 'netstat -tulpn' to check for listening ports.", "magenta"))
+
+def explain_netstat(args):
+    print(display_art('netstat'))
+    print(colored("The 'netstat -tulpn' command shows all listening TCP and UDP ports.", 'green'))
+
+    print(colored("\n---[ Network Connections (Listening) ]---", "cyan"))
+    print("Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name")
+    print("tcp        0      0 127.0.0.1:6379          0.0.0.0:*               LISTEN      -")
+    
+    if process_is_running:
+        print(colored(f"tcp        0      0 0.0.0.0:{listening_port}            0.0.0.0:*               LISTEN      {suspicious_process['PID']}/{suspicious_process['COMMAND']}", 'red'))
+
+    print(colored("\n---[ Hint ]---", "cyan"))
+    if process_is_running:
+        print(colored(f"There it is! Port {listening_port} is open. It's time to shut this process down. Use the 'kill' command with the process ID (PID).", "magenta"))
+        print(colored(f"Example: kill {suspicious_process['PID']}", "magenta"))
+    else:
+        print(colored("The suspicious process is gone. Nothing to see here.", "green"))
+
+def explain_kill(pid):
+    global process_is_running
+    print(display_art('kill'))
+    print(colored("The 'kill' command sends a signal to a process to terminate it.", 'green'))
+
+    if not pid:
+        print(colored("Usage: kill <PID>", 'red'))
+        return
+
+    if pid == suspicious_process['PID'] and process_is_running:
+        process_is_running = False
+        print(colored(f"Success! You terminated the process with PID {pid}.", 'yellow'))
+        print(colored("\n---[ Mission Complete ]---", "cyan"))
+        print(colored("As the process shut down, it dropped a file containing the flag!", "yellow"))
+        print(colored(f"FLAG: {flag}", "yellow"))
+        print(colored("\nCongratulations, Analyst!", "magenta"))
+    elif pid == suspicious_process['PID'] and not process_is_running:
+        print(colored(f"Process {pid} has already been terminated.", "red"))
+    else:
+        print(colored(f"Error: No process with PID '{pid}' found or it's not the one you're looking for.", 'red'))
+
+def main():
+    print(colored("Welcome to the Process & Networking Challenge!", 'magenta'))
+    print(colored("We suspect an issue on this server. First, check if the local network service is running.", 'magenta'))
+    print(colored("Type 'help' for commands. Start by pinging the local host, e.g., 'ping localhost'.\n", 'magenta'))
+
+    while True:
+        try:
+            prompt = colored(f"hacker@defcon-academy$ ", 'green')
+            command = input(prompt).strip().lower()
+            if not command:
+                continue
+
+            parts = command.split()
+            cmd = parts[0]
+            args = parts[1:]
+
+            if cmd == 'ping':
+                explain_ping(args)
+            elif cmd == 'ps':
+                if 'aux' in args:
+                    explain_ps_aux(args)
+                else:
+                    explain_ps(args)
+            elif cmd == 'netstat':
+                explain_netstat(args)
+            elif cmd == 'kill':
+                explain_kill(args[0] if args else "")
+            elif cmd == 'help':
+                print(colored("---[ Commands ]---", 'cyan'))
+                print(colored("  ping <host>    - Check network connectivity (e.g., 'ping localhost').", 'yellow'))
+                print(colored("  ps [aux]       - List processes. 'aux' shows all.", 'yellow'))
+                print(colored("  netstat -tulpn - Show listening network ports.", 'yellow'))
+                print(colored("  kill <PID>     - Terminate a process.", 'yellow'))
+                print(colored("  exit           - Exit the challenge.", 'yellow'))
+            elif cmd == 'exit':
+                break
+            else:
+                print(colored(f"'{cmd}' is not a recognized command in this tutorial. Try 'help'.", 'red'))
+
+        except (KeyboardInterrupt, EOFError):
+            print("\nGoodbye!")
+            break
+
+if __name__ == "__main__":
+    main()

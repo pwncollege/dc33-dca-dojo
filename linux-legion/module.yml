@@ -9,4 +9,8 @@ challenges:
   - id: second
     name: Managing Files
     image: prathamgupta36/dca-defcon-base
-    description: 
+    description: managing files is important
+  - id: third
+    name: Networking
+    image: prathamgupta36/dca-defcon-base
+    description: there is something suspicious
