@@ -8,3 +8,4 @@ modules:
   - id: dc33-race-against-the-machine
   - id: dc33-deceit-by-design
   - id: linux-legion
+  - id: dc33-byte-sized-basics
