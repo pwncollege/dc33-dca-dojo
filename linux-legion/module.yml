@@ -14,3 +14,7 @@ challenges:
     name: Networking
     image: prathamgupta36/dca-defcon-base
     description: there is something suspicious
+  - id: fourth
+    name: Exporting Is Fun
+    image: prathamgupta36/dca-defcon-base
+    description: make sure the export works

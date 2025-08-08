@@ -1,0 +1,70 @@
+#!/usr/bin/exec-suid -- /usr/local/bin/python
+
+import os
+from termcolor import colored
+import pyfiglet
+
+def display_art(text, font='block'):
+    raw = pyfiglet.figlet_format(text, font=font)
+    solid = "".join("█" if c not in (" ", "\n") else c for c in raw)
+    return colored(solid, 'yellow')
+
+def explain_export(args):
+    print(display_art('export'))
+    if not args:
+        print(colored("Usage: export VAR=value", 'red'))
+        return False
+
+    arg_string = "".join(args)
+    if "=" in arg_string:
+        var, value = arg_string.split("=", 1)
+        if var == "FLAG" and value == "defcon-academy":
+            with open("/flag", "r") as f:
+                print(colored("\n" + f.read(), "yellow"))
+            return True # Signal to exit
+        else:
+            print(colored(f"Environment variable '{var}' set to '{value}'.", 'green'))
+            print(colored("---[ Hint ]---", "cyan"))
+            print(colored("Keep trying! The variable name and value are important.", "magenta"))
+    else:
+        print(colored("Usage: export VAR=value", 'red'))
+    
+    return False
+
+def main():
+    print(colored("Welcome to the Environment Variable Challenge!", 'magenta'))
+    print(colored("Your mission: Set the correct environment variable to get the flag.", 'magenta'))
+    print(colored("Type 'help' to see available commands.\n", 'magenta'))
+    print(colored("---[ Hint ]---", "cyan"))
+    print(colored("The environment variable you need to set is named FLAG.", "magenta"))
+
+
+    while True:
+        try:
+            prompt = colored(f"hacker@defcon-academy:/$ ", 'green')
+            command = input(prompt).strip()
+            if not command:
+                continue
+
+            parts = command.split()
+            cmd = parts[0]
+            args = parts[1:]
+
+            if cmd == 'export':
+                if explain_export(args):
+                    break # Exit on win
+            elif cmd == 'help':
+                print(colored("---[ Commands ]---", 'cyan'))
+                print(colored("  export VAR=value - Set an environment variable.", 'yellow'))
+                print(colored("  exit             - Exit the challenge.", 'yellow'))
+            elif cmd == 'exit':
+                break
+            else:
+                print(colored(f"'{cmd}' is not a recognized command. Try 'help'.", 'red'))
+
+        except (KeyboardInterrupt, EOFError):
+            print("\nGoodbye!")
+            break
+
+if __name__ == "__main__":
+    main()
