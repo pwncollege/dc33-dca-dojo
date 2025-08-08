@@ -1,0 +1,134 @@
+#!/usr/bin/exec-suid -- /usr/local/bin/python
+
+import os
+import pwd
+import grp
+import stat
+from datetime import datetime
+from termcolor import colored
+import pyfiglet
+import re
+
+# --- State ---
+# Using a dictionary to hold file system state
+fs = {
+    "instructions.txt": "Combine part1.txt and part2.txt to get your next instructions.",
+    "part1.txt": "touch defcon-academy.txt",
+    "part2.txt": "echo \"I am hacker\" > defcon-academy.txt"
+}
+
+def display_art(text, font='block'):
+    raw = pyfiglet.figlet_format(text, font=font)
+    solid = "".join("█" if c not in (" ", "\n") else c for c in raw)
+    return colored(solid, 'yellow')
+
+def explain_ls():
+    print(display_art('ls'))
+    print(colored("The 'ls' command lists the files and directories.", 'green'))
+    for item in sorted(fs.keys()):
+        color = 'yellow'
+        icon = '📄'
+        print(colored(f"{icon} {item}", color))
+    print(colored("\n---[ Hint ]---", "cyan"))
+    print(colored("Start by reading `instructions.txt` with the `cat` command.", "magenta"))
+
+def explain_cat(file):
+    print(display_art('cat'))
+    if not file:
+        print(colored("Usage: cat <file>", 'red'))
+        return
+
+    if file in fs:
+        print(colored(f"--- Content of {file} ---", 'cyan'))
+        print(fs[file])
+        print(colored(f"--- End of {file} ---", 'cyan'))
+    else:
+        print(colored(f"Error: File '{file}' not found.", 'red'))
+
+def explain_touch(file):
+    print(display_art('touch'))
+    if not file:
+        print(colored("Usage: touch <file>", 'red'))
+        return
+    if file not in fs:
+        fs[file] = ""
+        print(colored(f"File '{file}' created.", 'green'))
+    else:
+        # In this simulation, touch on existing file does nothing visible
+        print(colored(f"Timestamp of '{file}' updated.", 'green'))
+
+def explain_echo(args):
+    print(display_art('echo'))
+    # Basic parsing for "text > file"
+    if '>' in args:
+        parts = ' '.join(args).split('>')
+        text_to_write = parts[0].strip()
+        filename = parts[1].strip()
+
+        # Remove quotes from text
+        if text_to_write.startswith('"') and text_to_write.endswith('"'):
+            text_to_write = text_to_write[1:-1]
+        
+        if filename == "defcon-academy.txt":
+            if "defcon-academy.txt" not in fs:
+                 print(colored(f"Error: File '{filename}' does not exist. Try creating it first.", 'red'))
+                 return
+            fs[filename] = text_to_write
+            print(colored(f"Wrote to '{filename}'.", 'green'))
+            
+            # Check for the win condition
+            if text_to_write == "I am hacker":
+                with open("/flag", "r") as f:
+                    print(colored("\n" + f.read(), "yellow"))
+                return True # Signal to exit
+        else:
+            print(colored("You can only write to 'defcon-academy.txt' in this challenge.", 'red'))
+    else:
+        print(' '.join(args))
+    return False
+
+
+def main():
+    print(colored("Welcome to the Command Line Challenge!", 'magenta'))
+    print(colored("Your mission: Follow the instructions to reveal the flag.", 'magenta'))
+    print(colored("Type 'help' to see available commands. Start with 'ls'.\n", 'magenta'))
+
+    while True:
+        try:
+            prompt = colored(f"defcon-academy-hacker@challenge:/$ ", 'green')
+            command = input(prompt).strip()
+            if not command:
+                continue
+
+            parts = command.split()
+            cmd = parts[0]
+            args = parts[1:]
+
+            if cmd == 'ls':
+                explain_ls()
+            elif cmd == 'cat':
+                explain_cat(args[0] if args else "")
+            elif cmd == 'touch':
+                explain_touch(args[0] if args else "")
+            elif cmd == 'echo':
+                if explain_echo(args):
+                    break # Exit on win
+            elif cmd == 'help':
+                print(colored("---[ Commands ]---", 'cyan'))
+                print(colored("  ls           - List files.", 'yellow'))
+                print(colored("  cat <file>   - Read a file's content.", 'yellow'))
+                print(colored("  touch <file> - Create an empty file.", 'yellow'))
+                print(colored("  echo <text> > <file> - Write text to a file.", 'yellow'))
+                print(colored("  exit         - Exit the challenge.", 'yellow'))
+            elif cmd == 'exit':
+                break
+            else:
+                print(colored(f"'{cmd}' is not a recognized command. Try 'help'.", 'red'))
+
+        except (KeyboardInterrupt, EOFError):
+            print("\nGoodbye!")
+            break
+
+if __name__ == "__main__":
+    main()
+
