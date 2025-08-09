@@ -126,6 +126,7 @@ def main():
     print(colored("Welcome to the Interactive Command Line Challenge!", 'magenta'))
     print(colored("Your mission is to explore this environment and find the hidden flag.", 'magenta'))
     print(colored("Type 'help' to see a list of commands. Start by exploring with 'ls'.\n", 'magenta'))
+    print(colored("Do cd /challenge to get to the challenge directory'.\n", 'magenta'))
 
     # Create a dummy file for the user to see
     with open("/challenge/welcome.txt", "w") as f:
