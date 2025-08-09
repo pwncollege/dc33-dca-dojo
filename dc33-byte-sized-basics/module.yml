@@ -1,0 +1,7 @@
+name: Byte-Sized-Basics
+
+challenges:
+  - id: chals
+    name: Byte-Sized-Basics
+    description: Run "./challenge/auto_gdb ./challenge/challenge" to begin the flag challenge, Skeleton files located at /tmp/challenge to follow along!
+ 
